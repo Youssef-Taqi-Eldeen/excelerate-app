@@ -80,7 +80,7 @@ Place the following images in the repository under a directory named `screenshot
 
 ## Demo Video
 A full app walkthrough is available here:  
-[Demo Video Link](YOUR_VIDEO_LINK_HERE)
+[Demo Video Link](https://drive.google.com/drive/folders/1nWOO7EWqtn-CiTC9hSWER_1ATgOK-Hf8)
 
 Replace the placeholder with your final hosted link (YouTube or Google Drive view link).
 
