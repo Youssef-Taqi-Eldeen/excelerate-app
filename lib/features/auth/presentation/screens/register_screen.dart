@@ -5,25 +5,28 @@ import '../../../../core/constants/app_sizes.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/social_login_button.dart';
 import '../widgets/auth_button.dart';
-import 'register_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
-  bool _rememberMe = false;
+  bool _agreeToTerms = false;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -34,15 +37,25 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void _toggleRememberMe(bool? value) {
+  void _toggleTermsAgreement(bool? value) {
     setState(() {
-      _rememberMe = value ?? false;
+      _agreeToTerms = value ?? false;
     });
   }
 
-  void _handleLogin() {
+  void _handleRegister() {
+    if (!_agreeToTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please agree to Terms & Conditions'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
+
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement login logic
+      // TODO: Implement registration logic
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
@@ -76,31 +89,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _navigateToRegister() {
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const RegisterScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOutCubic;
-
-          var tween = Tween(
-            begin: begin,
-            end: end,
-          ).chain(CurveTween(curve: curve));
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-        transitionDuration: const Duration(milliseconds: 400),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 // Header
                 const Text(
-                  'Welcome Back! ',
+                  'Create Account ',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
@@ -137,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: AppSizes.sm),
 
                 const Text(
-                  'Login to continue your learning',
+                  'Start your learning journey today',
                   style: TextStyle(
                     fontSize: 16,
                     color: AppColors.textSecondary,
@@ -145,6 +133,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 const SizedBox(height: AppSizes.xl),
+
+                // Full Name Field
+                CustomTextField(
+                  controller: _nameController,
+                  label: 'Full Name',
+                  hintText: 'Enter your full name',
+                  prefixIcon: Icons.person_outline,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: AppSizes.md),
 
                 // Email Field
                 CustomTextField(
@@ -166,11 +170,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: AppSizes.md),
 
+                // Phone Field
+                CustomTextField(
+                  controller: _phoneController,
+                  label: 'Phone Number',
+                  hintText: 'Enter your phone number',
+                  prefixIcon: Icons.phone_outlined,
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number';
+                    }
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: AppSizes.md),
+
                 // Password Field
                 CustomTextField(
                   controller: _passwordController,
                   label: 'Password',
-                  hintText: 'Enter your password',
+                  hintText: 'Create a password',
                   prefixIcon: Icons.lock_outline,
                   obscureText: _obscurePassword,
                   suffixIcon: IconButton(
@@ -184,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Please enter a password';
                     }
                     if (value.length < 6) {
                       return 'Password must be at least 6 characters';
@@ -195,44 +216,44 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: AppSizes.md),
 
-                // Remember Me & Forgot Password
+                // Terms & Conditions
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: Checkbox(
-                            value: _rememberMe,
-                            onChanged: _toggleRememberMe,
-                            activeColor: AppColors.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Checkbox(
+                        value: _agreeToTerms,
+                        onChanged: _toggleTermsAgreement,
+                        activeColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
                         ),
-                        const SizedBox(width: AppSizes.sm),
-                        const Text(
-                          'Remember me',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        // TODO: Navigate to forgot password
-                      },
-                      child: const Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.primary,
+                    const SizedBox(width: AppSizes.sm),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          // TODO: Show terms and conditions
+                        },
+                        child: RichText(
+                          text: const TextSpan(
+                            text: 'I agree to ',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'Terms & Conditions',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -241,8 +262,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: AppSizes.lg),
 
-                // Login Button
-                AuthButton(text: 'Login', onPressed: _handleLogin),
+                // Register Button
+                AuthButton(text: 'Create Account', onPressed: _handleRegister),
 
                 const SizedBox(height: AppSizes.lg),
 
@@ -257,7 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         horizontal: AppSizes.md,
                       ),
                       child: Text(
-                        'or continue with',
+                        'or sign up with',
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColors.textSecondary,
@@ -279,7 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SocialLoginButton(
                         icon: Icons.g_mobiledata,
                         onPressed: () {
-                          // TODO: Google login
+                          // TODO: Google signup
                         },
                         color: const Color(0xFFDB4437),
                       ),
@@ -289,7 +310,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SocialLoginButton(
                         icon: Icons.facebook,
                         onPressed: () {
-                          // TODO: Facebook login
+                          // TODO: Facebook signup
                         },
                         color: const Color(0xFF4267B2),
                       ),
@@ -299,7 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: SocialLoginButton(
                         icon: Icons.apple,
                         onPressed: () {
-                          // TODO: Apple login
+                          // TODO: Apple signup
                         },
                         color: Colors.black,
                       ),
@@ -309,22 +330,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: AppSizes.lg),
 
-                // Sign Up Link
+                // Login Link
                 Center(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Text(
-                        "Don't have an account? ",
+                        'Already have an account? ',
                         style: TextStyle(
                           fontSize: 15,
                           color: AppColors.textSecondary,
                         ),
                       ),
                       GestureDetector(
-                        onTap: _navigateToRegister,
+                        onTap: () => Navigator.of(context).pop(),
                         child: const Text(
-                          'Sign Up',
+                          'Login',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
