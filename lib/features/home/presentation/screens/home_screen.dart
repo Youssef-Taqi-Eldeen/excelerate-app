@@ -1,3 +1,4 @@
+import 'package:excelerate_app/features/course_details/presentation/screens/course_details_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
@@ -209,7 +210,41 @@ class _HomeScreenState extends State<HomeScreen> {
             currentLesson: 3,
             totalLessons: 8,
             onTap: () {
-              // TODO: Navigate to course details
+              // نستخدم أول كورس كمثال
+              if (_courses.isNotEmpty) {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        CourseDetailsScreen(course: _courses[0]),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0);
+                          const end = Offset.zero;
+                          const curve = Curves.easeInOutCubic;
+
+                          var tween = Tween(
+                            begin: begin,
+                            end: end,
+                          ).chain(CurveTween(curve: curve));
+
+                          var fadeAnimation = Tween<double>(
+                            begin: 0.0,
+                            end: 1.0,
+                          ).animate(animation);
+
+                          return FadeTransition(
+                            opacity: fadeAnimation,
+                            child: SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            ),
+                          );
+                        },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                );
+              }
             },
           ),
         ),
@@ -263,7 +298,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CourseCard(
                   course: _courses[index],
                   onTap: () {
-                    // TODO: Navigate to course details
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            CourseDetailsScreen(course: _courses[index]),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOutCubic;
+
+                              var tween = Tween(
+                                begin: begin,
+                                end: end,
+                              ).chain(CurveTween(curve: curve));
+
+                              var fadeAnimation = Tween<double>(
+                                begin: 0.0,
+                                end: 1.0,
+                              ).animate(animation);
+
+                              return FadeTransition(
+                                opacity: fadeAnimation,
+                                child: SlideTransition(
+                                  position: animation.drive(tween),
+                                  child: child,
+                                ),
+                              );
+                            },
+                        transitionDuration: const Duration(milliseconds: 400),
+                      ),
+                    );
                   },
                 ),
               );
