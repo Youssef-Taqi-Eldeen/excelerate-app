@@ -1,47 +1,276 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_sizes.dart';
+import '../../data/models/course_model.dart';
+import '../../data/models/category_model.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/category_chip.dart';
+import '../widgets/continue_learning_card.dart';
+import '../widgets/course_card.dart';
+import '../../../../shared/widgets/bottom_navigation.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedCategoryIndex = 0;
+  int _currentNavIndex = 0;
+
+  // Sample Data
+  final List<CategoryModel> _categories = [
+    CategoryModel(id: '1', name: 'All', icon: Icons.apps),
+    CategoryModel(id: '2', name: 'Programming', icon: Icons.code),
+    CategoryModel(id: '3', name: 'Design', icon: Icons.palette),
+    CategoryModel(id: '4', name: 'Business', icon: Icons.business_center),
+    CategoryModel(id: '5', name: 'Marketing', icon: Icons.campaign),
+  ];
+
+  final List<CourseModel> _courses = [
+    CourseModel(
+      id: '1',
+      title: 'Python Programming Masterclass',
+      instructor: 'Sarah Johnson',
+      rating: 4.8,
+      students: 2142,
+      price: 49,
+      duration: '12h',
+      totalLessons: 25,
+      category: 'Programming',
+      icon: Icons.code,
+      gradientColors: [Color(0xFF667EEA), Color(0xFF764BA2)],
+      isBestseller: true,
+    ),
+    CourseModel(
+      id: '2',
+      title: 'React JS Complete Guide 2024',
+      instructor: 'Michael Chen',
+      rating: 4.9,
+      students: 3521,
+      price: 59,
+      duration: '18h',
+      totalLessons: 32,
+      category: 'Programming',
+      icon: Icons.web,
+      gradientColors: [Color(0xFFF59E0B), Color(0xFFEF4444)],
+      isNew: true,
+    ),
+    CourseModel(
+      id: '3',
+      title: 'UI/UX Design Fundamentals',
+      instructor: 'Emma Davis',
+      rating: 4.7,
+      students: 1823,
+      price: 39,
+      duration: '10h',
+      totalLessons: 18,
+      category: 'Design',
+      icon: Icons.design_services,
+      gradientColors: [Color(0xFF10B981), Color(0xFF059669)],
+    ),
+    CourseModel(
+      id: '4',
+      title: 'Digital Marketing Pro',
+      instructor: 'David Miller',
+      rating: 5.0,
+      students: 4231,
+      price: 69,
+      duration: '15h',
+      totalLessons: 28,
+      category: 'Marketing',
+      icon: Icons.trending_up,
+      gradientColors: [Color(0xFF3B82F6), Color(0xFF2563EB)],
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Center(
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                gradient: AppColors.primaryGradient,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check_circle,
-                size: 70,
-                color: Colors.white,
-              ),
+            // Custom App Bar
+            CustomAppBar(
+              userName: 'John Doe',
+              onNotificationTap: () {
+                // TODO: Navigate to notifications
+              },
             ),
-            const SizedBox(height: 32),
-            const Text(
-              'Login Successful! 🎉',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+
+            // Scrollable Content
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: AppSizes.lg),
+
+                    // Categories
+                    _buildCategories(),
+
+                    const SizedBox(height: AppSizes.xl),
+
+                    // Continue Learning
+                    _buildContinueLearningSection(),
+
+                    const SizedBox(height: AppSizes.xl),
+
+                    // Popular Courses
+                    _buildPopularCoursesSection(),
+
+                    const SizedBox(height: AppSizes.xl),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Home screen will be here',
-              style: TextStyle(fontSize: 16, color: AppColors.textSecondary),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: CustomBottomNavigation(
+        currentIndex: _currentNavIndex,
+        onTap: (index) {
+          setState(() {
+            _currentNavIndex = index;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildCategories() {
+    return SizedBox(
+      height: 50,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: AppSizes.md),
+            child: CategoryChip(
+              category: _categories[index],
+              isSelected: _selectedCategoryIndex == index,
+              onTap: () {
+                setState(() {
+                  _selectedCategoryIndex = index;
+                });
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildContinueLearningSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Continue Learning',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // TODO: View all
+                },
+                child: const Text(
+                  'View All',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+          child: ContinueLearningCard(
+            title: 'Flutter Development Bootcamp',
+            instructor: 'Ahmed Mohamed',
+            progress: 0.65,
+            currentLesson: 3,
+            totalLessons: 8,
+            onTap: () {
+              // TODO: Navigate to course details
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopularCoursesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Popular Courses',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  // TODO: View all
+                },
+                child: const Text(
+                  'View All',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSizes.md),
+        SizedBox(
+          height: 295,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+            itemCount: _courses.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(right: AppSizes.md),
+                child: CourseCard(
+                  course: _courses[index],
+                  onTap: () {
+                    // TODO: Navigate to course details
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
