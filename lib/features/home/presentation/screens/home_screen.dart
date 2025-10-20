@@ -1,4 +1,5 @@
 import 'package:excelerate_app/features/course_details/presentation/screens/course_details_screen.dart';
+import 'package:excelerate_app/features/my_courses/presentation/screens/my_courses_screen.dart';
 import 'package:excelerate_app/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -145,8 +146,14 @@ class _HomeScreenState extends State<HomeScreen> {
               context,
               MaterialPageRoute(builder: (context) => const SearchScreen()),
             );
+          } else if (index == 2) {
+            // My Courses tab
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const MyCoursesScreen()),
+            );
           }
-          // TODO: Add navigation for other tabs
+          // TODO: Add Profile navigation
         },
       ),
     );
@@ -196,7 +203,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  // TODO: View all
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MyCoursesScreen(),
+                    ),
+                  );
                 },
                 child: const Text(
                   'View All',
