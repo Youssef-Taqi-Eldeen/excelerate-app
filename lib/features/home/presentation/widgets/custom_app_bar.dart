@@ -1,3 +1,4 @@
+import 'package:excelerate_app/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
@@ -116,33 +117,31 @@ class CustomAppBar extends StatelessWidget {
           const SizedBox(height: AppSizes.md),
 
           // Search Bar
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColors.cardBg,
-              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
-            ),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search courses...',
-                hintStyle: const TextStyle(
-                  color: AppColors.textHint,
-                  fontSize: 15,
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: AppColors.textSecondary,
-                ),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.md,
-                  vertical: AppSizes.md,
-                ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
+              );
+            },
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: AppColors.cardBg,
+                borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+                border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
               ),
-              onTap: () {
-                // TODO: Navigate to search screen
-              },
+              child: Row(
+                children: const [
+                  SizedBox(width: 16),
+                  Icon(Icons.search, color: AppColors.textSecondary),
+                  SizedBox(width: 12),
+                  Text(
+                    'Search courses...',
+                    style: TextStyle(color: AppColors.textHint, fontSize: 15),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

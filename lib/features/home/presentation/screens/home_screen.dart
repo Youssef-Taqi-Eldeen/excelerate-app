@@ -1,4 +1,5 @@
 import 'package:excelerate_app/features/course_details/presentation/screens/course_details_screen.dart';
+import 'package:excelerate_app/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
@@ -137,6 +138,15 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             _currentNavIndex = index;
           });
+
+          if (index == 1) {
+            // Explore tab
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SearchScreen()),
+            );
+          }
+          // TODO: Add navigation for other tabs
         },
       ),
     );
