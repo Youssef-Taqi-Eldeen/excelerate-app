@@ -1,5 +1,6 @@
 import 'package:excelerate_app/features/course_details/presentation/screens/course_details_screen.dart';
 import 'package:excelerate_app/features/my_courses/presentation/screens/my_courses_screen.dart';
+import 'package:excelerate_app/features/profile/presentation/profile_screen.dart';
 import 'package:excelerate_app/features/search/presentation/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -141,19 +142,24 @@ class _HomeScreenState extends State<HomeScreen> {
           });
 
           if (index == 1) {
-            // Explore tab
+            // Explore
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const SearchScreen()),
             );
           } else if (index == 2) {
-            // My Courses tab
+            // My Courses
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const MyCoursesScreen()),
             );
+          } else if (index == 3) {
+            // Profile
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
           }
-          // TODO: Add Profile navigation
         },
       ),
     );

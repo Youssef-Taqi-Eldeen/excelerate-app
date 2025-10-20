@@ -1,4 +1,5 @@
 import 'package:excelerate_app/features/course_details/presentation/screens/course_details_screen.dart';
+import 'package:excelerate_app/features/profile/presentation/profile_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
@@ -271,11 +272,15 @@ class _MyCoursesScreenState extends State<MyCoursesScreen> {
         currentIndex: _currentNavIndex,
         onTap: (index) {
           if (index == 0) {
-            // Navigate to Home
             Navigator.popUntil(context, (route) => route.isFirst);
           } else if (index == 1) {
-            // Navigate to Search
-            // TODO: Implement navigation
+            // Search
+          } else if (index == 3) {
+            // Profile
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
           } else {
             setState(() {
               _currentNavIndex = index;

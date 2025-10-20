@@ -1,5 +1,6 @@
 import 'package:excelerate_app/features/course_details/presentation/screens/course_details_screen.dart';
 import 'package:excelerate_app/features/my_courses/presentation/screens/my_courses_screen.dart';
+import 'package:excelerate_app/features/profile/presentation/profile_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
@@ -334,20 +335,23 @@ class _SearchScreenState extends State<SearchScreen> {
         currentIndex: _currentNavIndex,
         onTap: (index) {
           if (index == 0) {
-            // Home tab
             Navigator.pop(context);
           } else if (index == 2) {
-            // My Courses tab
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const MyCoursesScreen()),
+            );
+          } else if (index == 3) {
+            // Profile
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
             );
           } else {
             setState(() {
               _currentNavIndex = index;
             });
           }
-          // TODO: Add Profile navigation
         },
       ),
     );
